@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ScheduleClassCard,
   SectionHeading,
@@ -16,7 +16,6 @@ import {
   toSubjectOverview,
 } from '../data'
 import {
-  formatTimetableTime,
   getScheduleClassStatus,
   getScheduleForDay,
   timetableDayLabels,
@@ -32,6 +31,7 @@ function Home() {
   const [selectedCode, setSelectedCode] = useState('MCS 657')
   const [selectedDay, setSelectedDay] = useState<TimetableDay>('Friday')
   const [scheduleOpen, setScheduleOpen] = useState(false)
+  const subjectWasManuallySelected = useRef(false)
   const { currentTime, currentDay: nepalDay } = useNepalClock()
 
   useEffect(() => {
@@ -50,13 +50,34 @@ function Home() {
   const projectCourse = isProjectCourse(subject)
   const currentDay = nepalDay ?? 'Friday'
   const timetableCards = getScheduleForDay(selectedDay)
-  const activeEntry = currentTime
+  const currentEntry = currentTime
     ? timetableCards.find(
-        (entry) =>
-          getScheduleClassStatus(entry, currentDay, currentTime) ===
-          'in-progress',
-      )
+      (entry) =>
+        entry.kind !== 'Break' &&
+        getScheduleClassStatus(entry, currentDay, currentTime) ===
+        'in-progress',
+    )
     : undefined
+  const previewEntry = currentEntry ?? (currentTime
+    ? timetableCards.find(
+      (entry) =>
+        entry.kind !== 'Break' &&
+        getScheduleClassStatus(entry, currentDay, currentTime) ===
+        'upcoming',
+    )
+    : undefined)
+  const previewSubjectNumber = previewEntry?.code?.match(/\d+$/)?.[0]
+  const previewSubjectCode = previewSubjectNumber
+    ? subjects.find((item) =>
+      item.subject_code.endsWith(previewSubjectNumber),
+    )?.subject_code
+    : undefined
+
+  useEffect(() => {
+    if (subjectWasManuallySelected.current || !previewSubjectCode) return
+    setSelectedCode(previewSubjectCode)
+  }, [previewSubjectCode])
+
   const subjectOptions = getSubjectOptions(subjects)
   const overview = toSubjectOverview(subject)
   const units = toCurriculumUnits(subject)
@@ -80,36 +101,64 @@ function Home() {
                 <Button
                   aria-current={currentDay === day ? 'date' : undefined}
                   aria-pressed={selectedDay === day}
-                  className="schedule-day-tab"
+                  className={`schedule-day-tab${currentDay === day ? ' schedule-day-tab--today' : ''}`}
                   key={day}
                   onClick={() => setSelectedDay(day)}
                   variant="plain"
                 >
+                  {currentDay === day && (
+                    <span aria-hidden="true" className="schedule-day-tab__dot" />
+                  )}
                   {timetableDayLabels[day]}
-                  {currentDay === day ? ' (Today)' : ''}
+                  {/* {currentDay === day ? ' (Today)' : ''} */}
                 </Button>
               ))}
             </div>
             <Badge>{timetableCards.length} Classes</Badge>
-            {!scheduleOpen && activeEntry && (
-              <Badge className="schedule-preview" variant="amber">
+          </div>
+          <div className="schedule-toolbar__summary">
+            {!scheduleOpen && previewEntry && (
+              <Badge className="schedule-preview" variant="ink">
                 <span aria-hidden="true" className="schedule-preview__dot" />
-                In progress: {activeEntry.code ?? activeEntry.title} (
-                {formatTimetableTime(activeEntry.startTime)} –{' '}
-                {formatTimetableTime(activeEntry.endTime)})
+                {currentEntry ? 'Current' : 'Next'}: {previewEntry.title}
               </Badge>
             )}
+            <Button
+              aria-expanded={scheduleOpen}
+              aria-label={
+                scheduleOpen ? 'Collapse timetable' : 'Expand timetable'
+              }
+              className="schedule-toggle"
+              onClick={() => setScheduleOpen((open) => !open)}
+              variant="plain"
+            >
+              <span aria-hidden="true">{scheduleOpen ? 'Hide' : 'Show'}</span>
+              <svg
+                aria-hidden="true"
+                className="schedule-toggle__icon"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                {scheduleOpen ? (
+                  <path
+                    d="m3 10 5-5 5 5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                ) : (
+                  <path
+                    d="m3 6 5 5 5-5"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                )}
+              </svg>
+            </Button>
           </div>
-          <Button
-            aria-expanded={scheduleOpen}
-            aria-label={scheduleOpen ? 'Collapse timetable' : 'Expand timetable'}
-            className="schedule-toggle"
-            onClick={() => setScheduleOpen((open) => !open)}
-            square
-            variant="plain"
-          >
-            <span aria-hidden="true">{scheduleOpen ? '⌃' : '⌄'}</span>
-          </Button>
         </div>
 
         {scheduleOpen && (
@@ -128,23 +177,21 @@ function Home() {
         )}
       </section>
 
-{/* Subjects Selection Section */}
-      <section aria-label="Choose a course" className="selector-section">
-        <SubjectSelector
-          onChange={setSelectedCode}
-          projectHours={
-            projectCourse ? `${subject.project_total_hours}h` : undefined
-          }
-          practicalHours={`${subject.practical_total_hours}h`}
-          subjects={subjectOptions}
-          theoryHours={`${subject.theory_total_hours}h`}
-          value={selectedCode}
-        />
-      </section>
-      
       {/* Subjects Overview Section */}
       <section className="overview-section">
-        <SubjectOverview subject={overview} />
+        <SubjectOverview
+          selector={
+            <SubjectSelector
+              onChange={(code) => {
+                subjectWasManuallySelected.current = true
+                setSelectedCode(code)
+              }}
+              subjects={subjectOptions}
+              value={selectedCode}
+            />
+          }
+          subject={overview}
+        />
       </section>
 
       <section

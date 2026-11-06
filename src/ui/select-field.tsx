@@ -22,6 +22,7 @@ type SelectFieldProps = {
   label?: string
   onChange: (value: string) => void
   placeholder?: string
+  iconOnly?: boolean
   value: string
 }
 
@@ -34,6 +35,7 @@ export function SelectField({
   label,
   onChange,
   placeholder = 'Select an option',
+  iconOnly = false,
   value,
 }: SelectFieldProps) {
   const generatedId = useId()
@@ -101,7 +103,9 @@ export function SelectField({
   }
 
   return (
-    <div className="ui-select-field">
+    <div
+      className={`ui-select-field${iconOnly ? ' ui-select-field--icon-only' : ''}`}
+    >
       {label && (
         <label className="ui-select-field__label" htmlFor={controlId}>
           {label}
@@ -125,12 +129,31 @@ export function SelectField({
         type="button"
       >
         <span className="ui-select-field__value">
-          {selectedOption?.content ?? placeholder}
+          {iconOnly ? (
+            <svg
+              aria-hidden="true"
+              className="ui-select-field__exchange-icon"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M3 6h12m0 0-3-3m3 3-3 3M17 14H5m0 0 3 3m-3-3 3-3"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ) : (
+            selectedOption?.content ?? placeholder
+          )}
         </span>
-        <span
-          aria-hidden="true"
-          className={`ui-select-field__chevron${isOpen ? ' ui-select-field__chevron--open' : ''}`}
-        />
+        {!iconOnly && (
+          <span
+            aria-hidden="true"
+            className={`ui-select-field__chevron${isOpen ? ' ui-select-field__chevron--open' : ''}`}
+          />
+        )}
       </button>
       {isOpen && (
         <div
