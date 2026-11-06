@@ -15,7 +15,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'MTech Study | Course Gazette',
+        title: 'MTech Study',
       },
     ],
     links: [
