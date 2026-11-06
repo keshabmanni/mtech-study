@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skills": {
+    "data-loading": {
+      "source": "tanstack/router",
+      "sourceType": "github",
+      "skillPath": "packages/router-core/skills/router-core/data-loading/SKILL.md",
+      "computedHash": "14d4a3a1a0fc80d0626b74134b9fb4150e05f11f1369cf40aa1b4f6dab08b7d0"
+    },
+    "deployment": {
+      "source": "tanstack/router",
+      "sourceType": "github",
+      "skillPath": "packages/start-client-core/skills/start-core/deployment/SKILL.md",
+      "computedHash": "69b740ae1e683850d14c65438f55ffa73b7f5ce5c162aa637870e88fc74181e4"
+    },
+    "react-start": {
+      "source": "tanstack/router",
+      "sourceType": "github",
+      "skillPath": "packages/react-start/skills/react-start/SKILL.md",
+      "computedHash": "dc602c4db7f6dc5017ebfbb7b59dec68642626ebcd78b9dbc47a178ec0d83a74"
+    },
+    "router-core": {
+      "source": "tanstack/router",
+      "sourceType": "github",
+      "skillPath": "packages/router-core/skills/router-core/SKILL.md",
+      "computedHash": "7cb2becc52d6345cb8b31eb953d3b577da12ddf2ddec56d41a347ab9d094bfdb"
+    },
+    "server-functions": {
+      "source": "tanstack/router",
+      "sourceType": "github",
+      "skillPath": "packages/start-client-core/skills/start-core/server-functions/SKILL.md",
+      "computedHash": "1ac4c2761e2167496099b3e0f9ba0d3a8f0eaaca928e0c7ea47e38753181545f"
+    },
+    "start-core": {
+      "source": "tanstack/router",
+      "sourceType": "github",
+      "skillPath": "packages/start-client-core/skills/start-core/SKILL.md",
+      "computedHash": "8826bb3a4585629b65a81e1073c56ab7b56d79c8e494b814afef013a2b8357bb"
+    }
+  }
+}
