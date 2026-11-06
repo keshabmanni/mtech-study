@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import {
+  AppLoader,
   ScheduleClassCard,
   SectionHeading,
   SubjectOverview,
@@ -31,6 +32,7 @@ function Home() {
   const [selectedCode, setSelectedCode] = useState('MCS 657')
   const [selectedDay, setSelectedDay] = useState<TimetableDay>('Friday')
   const [scheduleOpen, setScheduleOpen] = useState(false)
+  const [initialSelectionReady, setInitialSelectionReady] = useState(false)
   const subjectWasManuallySelected = useRef(false)
   const { currentTime, currentDay: nepalDay } = useNepalClock()
 
@@ -72,11 +74,28 @@ function Home() {
       item.subject_code.endsWith(previewSubjectNumber),
     )?.subject_code
     : undefined
+  const todayScheduleDay = timetableDays.find((day) => day === nepalDay)
 
   useEffect(() => {
-    if (subjectWasManuallySelected.current || !previewSubjectCode) return
-    setSelectedCode(previewSubjectCode)
-  }, [previewSubjectCode])
+    if (!nepalDay || (todayScheduleDay && selectedDay !== todayScheduleDay)) {
+      return
+    }
+
+    if (!subjectWasManuallySelected.current && previewSubjectCode) {
+      if (selectedCode !== previewSubjectCode) {
+        setSelectedCode(previewSubjectCode)
+        return
+      }
+    }
+
+    setInitialSelectionReady(true)
+  }, [
+    nepalDay,
+    previewSubjectCode,
+    selectedCode,
+    selectedDay,
+    todayScheduleDay,
+  ])
 
   const subjectOptions = getSubjectOptions(subjects)
   const overview = toSubjectOverview(subject)
@@ -282,6 +301,9 @@ function Home() {
         <span>{subjects.length} courses in this edition</span>
       </footer>
       <div aria-hidden="true" className="gazette-hatch gazette-hatch--bottom" />
+      {!initialSelectionReady && (
+        <AppLoader message="Loading today’s schedule" />
+      )}
     </main>
   )
 }

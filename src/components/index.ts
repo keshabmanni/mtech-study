@@ -1,3 +1,4 @@
+export { AppLoader } from './app-loader'
 export { ScheduleClassCard } from './schedule-class-card'
 export type { ClassStatus, ScheduleClass } from './schedule-class-card'
 export { SectionHeading } from './section-heading'
