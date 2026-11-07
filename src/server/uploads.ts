@@ -1,4 +1,4 @@
-const uploadPrefix = 'mtech-study-files/'
+const uploadPrefix = 'temporary-uploads/'
 const retentionMs = 60 * 60 * 1000
 
 export type TemporaryUpload = {
