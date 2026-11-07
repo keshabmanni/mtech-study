@@ -7,7 +7,10 @@
   "name": "mtech",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry",
+  "main": "src/worker.ts",
+  "vars": {
+    "UPLOADS_MAX_FILES": "5",
+  },
   "observability": {
     "enabled": true,
   },
@@ -19,4 +22,39 @@
       "database_id": "9a8687ab-098e-418f-a410-1b54a011e45c",
     },
   ],
+  "r2_buckets": [
+    {
+      "binding": "UPLOADS",
+      "bucket_name": "mtech-study-files",
+    },
+  ],
+  "ratelimits": [
+    {
+      "name": "MAIN_PAGE_LIMITER",
+      "namespace_id": "2026110701",
+      "simple": {
+        "limit": 30,
+        "period": 60,
+      },
+    },
+    {
+      "name": "UPLOAD_API_LIMITER",
+      "namespace_id": "2026110702",
+      "simple": {
+        "limit": 10,
+        "period": 60,
+      },
+    },
+    {
+      "name": "UPLOAD_DOWNLOAD_LIMITER",
+      "namespace_id": "2026110703",
+      "simple": {
+        "limit": 30,
+        "period": 60,
+      },
+    },
+  ],
+  "triggers": {
+    "crons": ["*/10 * * * *"],
+  },
 }

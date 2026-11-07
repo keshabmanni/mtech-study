@@ -41,7 +41,23 @@ This project uses the Cloudflare Vite plugin (configured in `vite.config.ts`) an
 
 For production env vars, run `wrangler secret put MY_VAR` for each secret listed in `.env.example`. Public (non-secret) vars go in `wrangler.jsonc` under `vars`.
 
-KV, D1, R2, and Durable Object bindings are configured in `wrangler.jsonc` — see https://developers.cloudflare.com/workers/wrangler/configuration/.
+KV, D1, and R2 bindings are configured in `wrangler.jsonc` — see https://developers.cloudflare.com/workers/wrangler/configuration/.
+
+### Temporary uploads
+
+The `/upload` page stores anonymous uploads in the `mtech-study-files` folder in the `mtech-study-files` R2 bucket. `UPLOADS_MAX_FILES` in `wrangler.jsonc` under `vars` sets the total number of unexpired files allowed in the folder and the maximum batch size; the upload page fetches this value from the server. Before each upload, the Worker counts unexpired R2 files and rejects a batch that would exceed the limit. This check does not serialize concurrent uploads, so simultaneous requests can exceed the configured limit. Create the bucket once before deploying:
+
+```bash
+npx wrangler r2 bucket create mtech-study-files
+npm run cf-typegen
+npm run deploy
+```
+
+The configured file limit applies to both the total unexpired files in the folder and the maximum files per upload batch. Each file has a 10 MB limit. The upload page fetches and displays every unexpired file in the R2 folder, including its unguessable download link. Anyone who can access the page can see the file names and links; anyone with a download link can access that file until it expires. Files are available for one hour. The Worker runs scheduled cleanup every ten minutes; expired downloads are rejected immediately, while object deletion may occur on the next cleanup run.
+
+### Request rate limits
+
+The Worker rate-limits requests per client IP: the home page allows 30 requests per 60 seconds, `POST /api/uploads` allows 10 requests per 60 seconds, and file downloads allow 30 requests per 60 seconds. Cloudflare's Rate Limiting API is approximate and tracks limits separately in each Cloudflare location.
 
 
 

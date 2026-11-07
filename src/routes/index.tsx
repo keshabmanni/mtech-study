@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import {
   AppLoader,
@@ -298,7 +298,10 @@ function Home() {
 
       <footer className="gazette-footer">
         <span>MTech Study &bull; Semester II curriculum</span>
-        <span>{subjects.length} courses in this edition</span>
+        <span className="gazette-footer__links">
+          {subjects.length} courses in this edition
+          <Link to="/upload">Upload a file ↗</Link>
+        </span>
       </footer>
       <div aria-hidden="true" className="gazette-hatch gazette-hatch--bottom" />
       {!initialSelectionReady && (
