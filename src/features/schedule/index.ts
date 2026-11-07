@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import timetableData from '../../../mock-data/timetable.json'
+import { timetableData } from '../../data/timetable'
+import type { TimetableDay } from '../../data/timetable'
 
 export type ClassStatus = 'completed' | 'in-progress' | 'upcoming'
 
-export type TimetableDay = 'Thursday' | 'Friday' | 'Saturday'
+export type { TimetableDay } from '../../data/timetable'
 
 export type ScheduleClass = {
   day: string

@@ -9,9 +9,9 @@ import {
   UnitCard,
 } from '../components'
 import {
+  getSubjects,
   getSubjectOptions,
   isProjectCourse,
-  subjects,
   toCurriculumUnits,
   toProjectReportUnits,
   toSubjectOverview,
@@ -26,9 +26,13 @@ import {
 } from '../features/schedule'
 import { Badge, Button, Panel } from '../ui'
 
-export const Route = createFileRoute('/')({ component: Home })
+export const Route = createFileRoute('/')({
+  loader: () => getSubjects(),
+  component: Home,
+})
 
 function Home() {
+  const subjects = Route.useLoaderData()
   const [selectedCode, setSelectedCode] = useState('MCS 657')
   const [selectedDay, setSelectedDay] = useState<TimetableDay>('Friday')
   const [scheduleOpen, setScheduleOpen] = useState(false)

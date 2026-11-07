@@ -55,6 +55,7 @@ export function toCurriculumUnits(subject: SubjectData): Unit[] {
     number: unit.unit_no,
     title: unit.unit_title,
     hours: `${unit.hours} hours`,
+    professor: unit.professor,
     topics: unit.chapters.map((title) => ({ title })),
   }))
 }
@@ -76,6 +77,7 @@ function toProjectUnit(section: ProjectSection): Unit {
     number: getProjectSectionNumber(section),
     title: section.section_title,
     hours: `${points.length} items`,
+    professor: null,
     topics: points.map((title) => ({ title })),
   }
 }

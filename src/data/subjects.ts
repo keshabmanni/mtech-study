@@ -1,5 +1,3 @@
-import semesterTwo from '../../mock-data/sem2_detailed.json'
-
 export type ProjectSection = {
   section_no: string
   section_title: string
@@ -19,11 +17,10 @@ export type SubjectData = {
     unit_no: number
     unit_title: string
     hours: number
+    professor: string | null
     chapters: string[]
   }[]
   practical: string[]
   project_implementation_guidelines?: ProjectSection[]
   project_report_guidelines?: ProjectSection[]
 }
-
-export const subjects: SubjectData[] = semesterTwo

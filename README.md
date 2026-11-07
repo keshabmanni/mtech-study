@@ -43,6 +43,10 @@ For production env vars, run `wrangler secret put MY_VAR` for each secret listed
 
 KV, D1, and R2 bindings are configured in `wrangler.jsonc` — see https://developers.cloudflare.com/workers/wrangler/configuration/.
 
+### Curriculum data
+
+The home page loads subjects from the bound D1 database's `subjects` table through a server function. `mock-data/sem2_detailed.json` is seed/reference data, not a runtime dependency. The DDL and insert scripts in `sql_d1_schema/` define and populate the table.
+
 ### Temporary uploads
 
 The `/upload` page stores anonymous uploads in the `mtech-study-files` folder in the `mtech-study-files` R2 bucket. `UPLOADS_MAX_FILES` in `wrangler.jsonc` under `vars` sets the total number of unexpired files allowed in the folder and the maximum batch size; the upload page fetches this value from the server. Before each upload, the Worker counts unexpired R2 files and rejects a batch that would exceed the limit. This check does not serialize concurrent uploads, so simultaneous requests can exceed the configured limit. Create the bucket once before deploying:

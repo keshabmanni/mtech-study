@@ -10,6 +10,7 @@ export type Unit = {
   number: number | string
   title: string
   hours: string
+  professor: string | null
   topics: UnitTopic[]
 }
 
@@ -23,7 +24,6 @@ type UnitCardProps = {
 export function UnitCard({
   unit,
   sectionLabel = 'Unit',
-  footerLabel = 'Section specification',
   footerValue,
 }: UnitCardProps) {
   return (
@@ -51,7 +51,9 @@ export function UnitCard({
       </ul>
 
       <footer className="unit-card__footer">
-        <span>{footerLabel}</span>
+        <span className="unit-card__professor">
+          {unit.professor ?? 'TBD'}
+        </span>
         <strong>{footerValue ?? `Mod. ${unit.number}`}</strong>
       </footer>
     </article>

@@ -5,5 +5,11 @@ export {
   toProjectReportUnits,
   toSubjectOverview,
 } from './subject-mappers'
-export { subjects } from './subjects'
+export { getSubjects } from './subjects.functions'
+export { timetableData } from './timetable'
+export type {
+  TimetableDay,
+  TimetableEntry,
+  TimetableSessionType,
+} from './timetable'
 export type { ProjectSection, SubjectData } from './subjects'
