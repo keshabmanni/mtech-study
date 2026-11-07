@@ -1349,6 +1349,30 @@ select {
     margin: 0.5rem auto;
   }
 
+  .upload-shell .ui-button {
+    font-size: 0.65rem;
+  }
+
+  .upload-shell .ui-badge {
+    font-size: 0.5rem;
+  }
+
+  .upload-back {
+    font-size: 0.65rem;
+  }
+
+  .upload-content h1 {
+    font-size: clamp(1.65rem, 7vw, 2.4rem);
+  }
+
+  .upload-kicker {
+    font-size: 0.58rem;
+  }
+
+  .upload-intro {
+    font-size: 0.8rem;
+  }
+
   .upload-dropzone {
     min-height: 6rem;
     gap: 0.55rem;
@@ -1357,7 +1381,11 @@ select {
 
   .upload-dropzone > strong {
     max-width: 55%;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  .upload-icon {
+    font-size: 1.25rem;
   }
 
   .upload-dropzone > span:not(.upload-icon, .upload-browse) {
@@ -1368,8 +1396,38 @@ select {
     margin-left: auto;
   }
 
+  .upload-file-list__item {
+    font-size: 0.62rem;
+  }
+
+  .upload-file-list__size,
+  .upload-file-list__remove {
+    font-size: 0.54rem;
+  }
+
+  .upload-progress {
+    font-size: 0.58rem;
+  }
+
+  .upload-result__heading h2 {
+    font-size: 0.95rem;
+  }
+
+  .upload-result__check {
+    font-size: 1.05rem;
+  }
+
   .upload-receipt {
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .upload-receipt__file strong {
+    font-size: 0.64rem;
+  }
+
+  .upload-receipt__file span,
+  .upload-receipt__time span {
+    font-size: 0.5rem;
   }
 
   .upload-receipt__time {
@@ -1382,6 +1440,14 @@ select {
     grid-row: 1 / span 2;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .upload-message {
+    font-size: 0.62rem;
+  }
+
+  .upload-shell .gazette-footer {
+    font-size: 0.5rem;
   }
 }
 
